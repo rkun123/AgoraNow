@@ -18,5 +18,8 @@
     "babelify": "^8.0.0",
     "browserfy": "^1.0.0",
     "browserify": "^16.2.2"
-  }
+},
+"browser":{
+    "vue":"vue/dist/vue.common.js"
+}
 }

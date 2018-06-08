@@ -1,5 +1,12 @@
-import "vue"
+import Vue from "vue";
 
+
+let app;
 window.onload = ()=>{
-    console.log("Loaded!!");
+    app = new Vue({
+        el: "#app",
+        data:{
+            message: "Hello, World"
+        }
+    });
 }
