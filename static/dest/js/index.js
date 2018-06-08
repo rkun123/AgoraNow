@@ -12683,24 +12683,54 @@ var _apiCom = require("./lib/apiCom");
 
 var _apiCom2 = _interopRequireDefault(_apiCom);
 
+var _ui = require("./lib/ui");
+
+var _ui2 = _interopRequireDefault(_ui);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var app = void 0;
 window.onload = function () {
+    (0, _ui2.default)();
     var api = new _apiCom2.default();
-    api.updateStatusData();
 
     //main app
     app = new _vue2.default({
         el: "#app",
         data: {
             header: "<h1>あごらなう</h1>",
-            message: "Hello, World"
+            message: "Hello, World",
+            statusArray: [],
+            UIflags: {
+                loginPopup: false
+            },
+            username: "",
+            password: ""
+        },
+        created: function created() {
+            var _this = this;
+
+            api.updateStatusData(function (data) {
+                _this.statusArray = data;
+            });
+        },
+        methods: {
+            login: function login(e) {
+                var _this2 = this;
+
+                api.login(this.username, this.password, function (isLogined) {
+                    if (isLogined) {
+                        _this2.UIflags.loginPopup = false;
+                    } else {
+                        _this2.username = _this2.password = "";
+                    }
+                });
+            }
         }
     });
 };
 
-},{"./lib/apiCom":31,"vue":29}],31:[function(require,module,exports){
+},{"./lib/apiCom":31,"./lib/ui":32,"vue":29}],31:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -12722,13 +12752,39 @@ var _class = function () {
         _classCallCheck(this, _class);
 
         console.log("Instanced apiCom!!");
+        this.axios = _axios2.default.create({
+            baseURL: "../"
+        });
+        this.statusArray = [];
     }
+    //"login" args->(username, password, callback(bool))
+
 
     _createClass(_class, [{
+        key: "login",
+        value: function login(user, pass, callback) {
+            var _this = this;
+
+            this.axios.post("/user/login", { "username": user, "password": pass }).then(function (res) {
+                _this.sessionID = res.data.session_id;
+                console.log("Success!!");
+                callback(true);
+            }).catch(function (err) {
+                console.log("Failed!!" + err);
+                callback(false);
+            });
+        }
+        //"updateStatusData" call once at start. args->(callback(array))
+
+    }, {
         key: "updateStatusData",
-        value: function updateStatusData() {
-            _axios2.default.get("http://127.0.0.1:8000/status/get_all_status").then(function (res) {
-                console.log(res);
+        value: function updateStatusData(callback) {
+            var _this2 = this;
+
+            this.axios.get("/status/get_all_status").then(function (res) {
+                console.log(res.data);
+                _this2.statusArray = res.data.data;
+                callback(res.data.data);
             }).catch(function (err) {
                 console.log(err);
             });
@@ -12740,4 +12796,18 @@ var _class = function () {
 
 exports.default = _class;
 
-},{"axios":1}]},{},[30]);
+},{"axios":1}],32:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+exports.default = function () {
+    /*var iso = new Isotope( '.grid', {
+        // options
+    });
+    */
+};
+
+},{}]},{},[30]);

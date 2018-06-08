@@ -3,13 +3,34 @@
     <head>
         <meta charset="utf-8">
         <title>あごらなう</title>
-        <link href="css/index.css">
+        <link rel="stylesheet" href="css/index.css">
+        <link rel="stylesheet" href="vendor/bootstrap.css">
     </head>
     <body>
         <script type="text/javascript" src="js/index.js"></script>
-        <h1>AgoraNow</h1>
-        <div id="app">
-            <div>{{ message }}</div>
+        <script type="text/javascript" src="js/ui.js"></script>
+        <script type="text/javascript" src="vendor/bootstrap.js"></script>
+        <script type="text/javascript" src="vendor/isotope.pkgd.min.js"></script>
+
+        <div id="app" class="container">
+            <div class="nav">
+                <h1 class="title">AgoraNow</h1>
+                <button class="loginBtn" v-on:click="UIflags.loginPopup=true">Login</button>
+            </div>
+            <div class="navSpacer"></div>
+            <div class="grid listWrapper">
+                <div class="grid-item card" style="width:12em;height:12em;" v-for="status in statusArray">
+                    <h5 class="author">{{ status.author.username }}</h5><br>
+                    <div class="position">{{ status.position.x }} x {{ status.position.y }}</div>
+                </div>
+            </div>
+
+
+            <div class="loginPopup" v-if="UIflags.loginPopup">
+                <input class="loginUsernameBox" v-model="username" placeholder="Username?">
+                <input class="loginPasswordBox" v-model="password" placeholder="Password?">
+                <button v-on:click="login">Login</button>
+            </div>
         </div>
     </body>
 </html>

@@ -37,11 +37,12 @@ def status_get(req):
 
 def getAllStatus(req):
     dataList = []
+    print(Status.objects.all())
     for i in Status.objects.all():
         data = {}
         data["status_id"] = i.status_id
         data["created_at"] = myUtils.genDateFormat(i.created_at)
-        #data["author"] = i.author
+        data["author"] = {"username": i.author.username, "user_id": i.author.user_id}
         data["position"] = {"x": i.pos_X, "y": i.pos_Y}
         data["comment"] = i.comment
         dataList.append(data)

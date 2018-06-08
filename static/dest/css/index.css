@@ -1,0 +1,44 @@
+.nav{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    height: 3em;
+    box-shadow: 0 2px 3px #000000;
+    background-color: #ffffff;
+}
+.loginBtn{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+
+}
+.title{
+    margin:0;
+}
+.navSpacer{
+    height: 3em;
+    padding: 20px;
+}
+.listWrapper{
+
+}
+.card{
+    float: left;
+    width: 12em;
+    height: 12em;
+    margin: 1em;
+    padding: 0.5em;
+    background-color: #ff0000;
+}
+.author{
+    font-size: 2em;
+    margin: 0;
+}
+.loginPopup{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    padding: 15%;
+}
