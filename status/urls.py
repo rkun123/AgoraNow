@@ -1,7 +1,8 @@
 from django.urls import path
-from .views import status_update, status_get
+from .views import *
 
 urlpatterns = [
     path('update',status_update),
-    path('get', status_get)
+    path('get_status', status_get),
+    path("get_all_status", getAllStatus)
 ]

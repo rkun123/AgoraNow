@@ -34,3 +34,17 @@ def status_get(req):
         return JsonResponse(status_record.__dict__)
     else:
         return HttpResponseNotFound()
+
+def getAllStatus(req):
+    dataList = []
+    for i in Status.objects.all():
+        data = {}
+        data["status_id"] = i.status_id
+        data["created_at"] = myUtils.genDateFormat(i.created_at)
+        #data["author"] = i.author
+        data["position"] = {"x": i.pos_X, "y": i.pos_Y}
+        data["comment"] = i.comment
+        dataList.append(data)
+    dataDict = {}
+    dataDict["data"] = dataList
+    return JsonResponse(dataDict)
