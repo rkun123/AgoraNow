@@ -36,15 +36,14 @@ def getUser(req):
     if len(loadedData) == 0:
         return HttpResponseBadRequest()
     print(loadedData)
-    resultData = []
-    for data in loadedData:
-        userData = {}
-        userData["user_id"] = data.user_id
-        userData["username"] = data.username
-        userData["created_at"] = myUtils.genDateFormat(data.created_at)
-        resultData.append(userData)
+    data = loadedData[0]
+    userData = {}
+    userData["user_id"] = data.user_id
+    userData["username"] = data.username
+    userData["created_at"] = myUtils.genDateFormat(data.created_at)
+    print(userData)
 
-    return HttpResponse(resultData)
+    return JsonResponse(userData)
 #for debug
 
 def getAllUser(req):

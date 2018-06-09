@@ -39,9 +39,11 @@ export default class {
         this.axios.get("/user/get_user?session_id=" + this.sessionID)
         .then((res)=>{
             callback(true, res.data);
+            console.log(res)
         })
         .catch((err)=>{
             callback(false, {})
+            console.log("Errored!!");
         })
     }
 
