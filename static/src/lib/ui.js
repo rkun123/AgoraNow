@@ -1,7 +1,12 @@
 export default {
     hideLoginmodal: ()=>{
-        $('body').removeClass('modal-open'); // 1
-        $('.modal-backdrop').remove();       // 2
-        $('#loginModal').modal('hide');        // 3
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
+        $('#loginModal').modal('hide');
+    },
+    hideCreatemodal: ()=>{
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
+        $('#createModal').modal('hide');
     }
 }

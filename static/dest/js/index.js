@@ -12710,7 +12710,8 @@ window.onload = function () {
             },
             UIflags: {
                 loginError: false,
-                logined: false
+                logined: false,
+                createError: false
             },
             username: "",
             password: ""
@@ -12718,8 +12719,8 @@ window.onload = function () {
         created: function created() {
             var _this = this;
 
-            api.updateStatusData(function (isSuc, data) {
-                if (isSuc) _this.statusArray = data;
+            api.updateStatusData(function (data) {
+                if (data) _this.statusArray = data;
             });
         },
         methods: {
@@ -12738,6 +12739,20 @@ window.onload = function () {
                         _this2.username = _this2.password = "";
                         _this2.UIflags.loginError = true;
                     }
+                });
+            },
+            create: function create(e) {
+                var _this3 = this;
+
+                api.createStatus(this.createData.pos_X, this.createData.pos_Y, this.createData.comment, function (status_id) {
+                    console.log(status_id);
+                    if (!status_id) _this3.UIflags.createError = true;
+                    api.getStatusData(status_id, function (data) {
+                        if (data) {
+                            _this3.statusArray.push(data);
+                            _ui2.default.hideCreatemodal();
+                        }
+                    });
                 });
             }
         }
@@ -12793,15 +12808,25 @@ var _class = function () {
     }, {
         key: "updateStatusData",
         value: function updateStatusData(callback) {
-            var _this2 = this;
-
             this.axios.get("/status/get_all_status").then(function (res) {
                 console.log(res.data);
-                _this2.statusArray = res.data.data;
-                callback(true, res.data.data);
+                //this.statusArray = res.data.data;
+                callback(res.data.data);
             }).catch(function (err) {
                 console.log(err);
-                callback(false, []);
+                callback(null);
+            });
+        }
+    }, {
+        key: "getStatusData",
+        value: function getStatusData(status_id, callback) {
+            this.axios.get("/status/get_status?status_id=" + status_id).then(function (res) {
+                console.log(res.data);
+                //this.statusArray = res.data.data;
+                callback(res.data);
+            }).catch(function (err) {
+                console.log(err);
+                callback(null);
             });
         }
         //"updateMyUserData" was called when user logined. args->(callback(bool, array))
@@ -12815,6 +12840,23 @@ var _class = function () {
             }).catch(function (err) {
                 callback(false, {});
                 console.log("Errored!!");
+            });
+        }
+        //"createStatus" args->(int pos_X, int pos_Y, string comment, callback(statusData))
+
+    }, {
+        key: "createStatus",
+        value: function createStatus(pos_X, pos_Y, comment, callback) {
+            this.axios.post("/status/update", {
+                "session_id": this.sessionID,
+                "pos_X": pos_X,
+                "pos_Y": pos_Y,
+                "comment": comment
+            }).then(function (res) {
+                callback(res.data.status_id);
+            }).catch(function (err) {
+                console.log(err);
+                callback(null);
             });
         }
     }]);
@@ -12832,9 +12874,14 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = {
     hideLoginmodal: function hideLoginmodal() {
-        $('body').removeClass('modal-open'); // 1
-        $('.modal-backdrop').remove(); // 2
-        $('#loginModal').modal('hide'); // 3
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
+        $('#loginModal').modal('hide');
+    },
+    hideCreatemodal: function hideCreatemodal() {
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
+        $('#createModal').modal('hide');
     }
 };
 

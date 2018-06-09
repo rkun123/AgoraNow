@@ -19,7 +19,7 @@ def status_update(req):
     author = User.objects.filter(user_id=user_id)[0]
     print(author)
     if author:
-        status_record = Status(author=author, pos_X=req_data["pos_X"], pos_Y=req_data["pos_Y"])
+        status_record = Status(author=author, pos_X=req_data["pos_X"], pos_Y=req_data["pos_Y"],comment=req_data["comment"])
         status_record.save()
         return JsonResponse({"status_id":status_record.status_id})
 
@@ -31,7 +31,8 @@ def status_get(req):
     status_id = req.GET.get("status_id")
     status_record = Status.objects.filter(status_id=status_id)[0]
     if status_record:
-        return JsonResponse(status_record.__dict__)
+        data = myUtils.genStatusDict(status_record)
+        return JsonResponse(data)
     else:
         return HttpResponseNotFound()
 
@@ -39,12 +40,7 @@ def getAllStatus(req):
     dataList = []
     print(Status.objects.all())
     for i in Status.objects.all():
-        data = {}
-        data["status_id"] = i.status_id
-        data["created_at"] = myUtils.genDateFormat(i.created_at)
-        data["author"] = {"username": i.author.username, "user_id": i.author.user_id}
-        data["position"] = {"x": i.pos_X, "y": i.pos_Y}
-        data["comment"] = i.comment
+        data = myUtils.genStatusDict(i)
         dataList.append(data)
     dataDict = {}
     dataDict["data"] = dataList

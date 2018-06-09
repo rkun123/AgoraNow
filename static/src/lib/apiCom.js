@@ -26,12 +26,24 @@ export default class {
         this.axios.get("/status/get_all_status")
         .then((res)=>{
             console.log(res.data);
-            this.statusArray = res.data.data;
-            callback(true,res.data.data);
+            //this.statusArray = res.data.data;
+            callback(res.data.data);
         })
         .catch((err) => {
             console.log(err);
-            callback(false,[])
+            callback(null);
+        })
+    }
+    getStatusData(status_id, callback){
+        this.axios.get("/status/get_status?status_id=" + status_id)
+        .then((res)=>{
+            console.log(res.data);
+            //this.statusArray = res.data.data;
+            callback(res.data);
+        })
+        .catch((err) => {
+            console.log(err);
+            callback(null)
         })
     }
     //"updateMyUserData" was called when user logined. args->(callback(bool, array))
@@ -44,6 +56,22 @@ export default class {
         .catch((err)=>{
             callback(false, {})
             console.log("Errored!!");
+        })
+    }
+    //"createStatus" args->(int pos_X, int pos_Y, string comment, callback(statusData))
+    createStatus(pos_X, pos_Y, comment, callback){
+        this.axios.post("/status/update",{
+            "session_id":this.sessionID,
+            "pos_X": pos_X,
+            "pos_Y": pos_Y,
+            "comment": comment
+        })
+        .then((res)=>{
+            callback(res.data.status_id);
+        })
+        .catch((err)=>{
+            console.log(err);
+            callback(null);
         })
     }
 

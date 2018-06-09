@@ -22,15 +22,16 @@ window.onload = ()=>{
                 pos_Y:""
             },
             UIflags:{
-                loginError:false,
-                logined:false
+                loginError: false,
+                logined: false,
+                createError: false
             },
             username:"",
             password:"",
         },
         created:function(){
-            api.updateStatusData((isSuc, data)=>{
-                if(isSuc) this.statusArray = data;
+            api.updateStatusData((data)=>{
+                if(data) this.statusArray = data;
             });
         },
         methods:{
@@ -48,6 +49,18 @@ window.onload = ()=>{
                         this.UIflags.loginError = true;
                     }
                 });
+            },
+            create:function(e){
+                api.createStatus(this.createData.pos_X, this.createData.pos_Y, this.createData.comment, (status_id)=>{
+                    console.log(status_id);
+                    if(!status_id) this.UIflags.createError = true;
+                    api.getStatusData(status_id, (data)=>{
+                        if(data){
+                            this.statusArray.push(data);
+                            ui.hideCreatemodal();
+                        }
+                    })
+                })
             }
         }
     });
