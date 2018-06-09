@@ -4,7 +4,6 @@ import ui from "./lib/ui"
 
 let app;
 window.onload = ()=>{
-    ui();
     let api = new Api();
 
     //main app
@@ -14,8 +13,17 @@ window.onload = ()=>{
             header: "<h1>あごらなう</h1>",
             message: "Hello, World",
             statusArray:[],
+            userData:{
+                username:"",
+            },
+            createData:{
+                comment:"",
+                pos_X:"",
+                pos_Y:""
+            },
             UIflags:{
-                loginPopup:false
+                loginError:false,
+                logined:false
             },
             username:"",
             password:"",
@@ -29,9 +37,15 @@ window.onload = ()=>{
             login:function(e){
                 api.login(this.username, this.password, (isLogined)=>{
                     if(isLogined){
-                        this.UIflags.loginPopup = false;
+                        ui.hideLoginmodal();
+                        this.UIflags.logined = true;
+                        api.updateMyUserData((isSuc, data)=>{
+                            console.log(data);
+                            if(isSuc) this.userData.username = data.username;
+                        })
                     }else{
                         this.username = this.password = "";
+                        this.UIflags.loginError = true;
                     }
                 });
             }

@@ -4,19 +4,30 @@
         <meta charset="utf-8">
         <title>あごらなう</title>
         <link rel="stylesheet" href="css/index.css">
-        <link rel="stylesheet" href="vendor/bootstrap.css">
+        <link rel="stylesheet" href="vendor/bootstrap.min.css">
     </head>
     <body>
         <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript" src="js/ui.js"></script>
-        <script type="text/javascript" src="vendor/bootstrap.js"></script>
+        <script type="text/javascript" src="vendor/jquery-3.3.1.min.js"></script>
         <script type="text/javascript" src="vendor/isotope.pkgd.min.js"></script>
+        <script type="text/javascript" src="vendor/bootstrap.min.js"></script>
 
         <div id="app" class="container">
-            <div class="nav">
-                <h1 class="title">AgoraNow</h1>
-                <button class="loginBtn" v-on:click="UIflags.loginPopup=true">Login</button>
-            </div>
+            <nav class="navbar navbar-dark bg-dark">
+                <h1 class="navbar-brand">AgoraNow</h1>
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+
+                    </li>
+                </ul>
+                <div class="navbar-text">
+                    {{ userData.username }}
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#createModal" v-if="UIflags.logined">Create</button>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#loginModal">Login</button>
+
+                </div>
+            </nav>
             <div class="navSpacer"></div>
             <div class="grid listWrapper">
                 <div class="grid-item card" style="width:12em;height:12em;" v-for="status in statusArray">
@@ -25,11 +36,59 @@
                 </div>
             </div>
 
-
-            <div class="loginPopup" v-if="UIflags.loginPopup">
-                <input class="loginUsernameBox" v-model="username" placeholder="Username?">
-                <input class="loginPasswordBox" v-model="password" placeholder="Password?">
-                <button v-on:click="login">Login</button>
+            <!--login Popuo-->
+            <div class="modal fade" id="loginModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Login</h5>
+                        </div>
+                        <div class="modal-body">
+                            <div class="alert alert-primary" v-if="UIflags.loginError">Can't login to Server!!</div>
+                            <div class="form-group">
+                                <label>Username</label>
+                                <input class="form-control" v-model="username" placeholder="Username?">
+                            </div>
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input type="password" class="form-control" v-model="password" placeholder="Password?">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" v-on:click="login">Login</button>
+                            <button class="btn" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--createPopup-->
+            <div class="modal fade" id="createModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Create</h5>
+                        </div>
+                        <div class="modal-body">
+                            <div class="alert alert-primary" v-if="UIflags.loginError">Can't login to Server!!</div>
+                            <div class="form-group">
+                                <label>X</label>
+                                <input class="form-control" v-model="createData.pos_X" placeholder="Xposition">
+                            </div>
+                            <div class="form-group">
+                                <label>Y</label>
+                                <input class="form-control" v-model="createData.pos_Y" placeholder="Yposition">
+                            </div>
+                            <div class="form-group">
+                                <label>Comment</label>
+                                <textarea class="form-control" v-model="createData.pos_Y" placeholder="I am Agoring now!!"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" v-on:click="login">Login</button>
+                            <button class="btn" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </body>

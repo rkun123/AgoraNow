@@ -12691,7 +12691,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var app = void 0;
 window.onload = function () {
-    (0, _ui2.default)();
     var api = new _apiCom2.default();
 
     //main app
@@ -12701,8 +12700,17 @@ window.onload = function () {
             header: "<h1>あごらなう</h1>",
             message: "Hello, World",
             statusArray: [],
+            userData: {
+                username: ""
+            },
+            createData: {
+                comment: "",
+                pos_X: "",
+                pos_Y: ""
+            },
             UIflags: {
-                loginPopup: false
+                loginError: false,
+                logined: false
             },
             username: "",
             password: ""
@@ -12710,8 +12718,8 @@ window.onload = function () {
         created: function created() {
             var _this = this;
 
-            api.updateStatusData(function (data) {
-                _this.statusArray = data;
+            api.updateStatusData(function (isSuc, data) {
+                if (isSuc) _this.statusArray = data;
             });
         },
         methods: {
@@ -12720,9 +12728,15 @@ window.onload = function () {
 
                 api.login(this.username, this.password, function (isLogined) {
                     if (isLogined) {
-                        _this2.UIflags.loginPopup = false;
+                        _ui2.default.hideLoginmodal();
+                        _this2.UIflags.logined = true;
+                        api.updateMyUserData(function (isSuc, data) {
+                            console.log(data);
+                            if (isSuc) _this2.userData.username = data.username;
+                        });
                     } else {
                         _this2.username = _this2.password = "";
+                        _this2.UIflags.loginError = true;
                     }
                 });
             }
@@ -12774,7 +12788,7 @@ var _class = function () {
                 callback(false);
             });
         }
-        //"updateStatusData" call once at start. args->(callback(array))
+        //"updateStatusData" call once at start. args->(callback(bool, array))
 
     }, {
         key: "updateStatusData",
@@ -12784,9 +12798,23 @@ var _class = function () {
             this.axios.get("/status/get_all_status").then(function (res) {
                 console.log(res.data);
                 _this2.statusArray = res.data.data;
-                callback(res.data.data);
+                callback(true, res.data.data);
             }).catch(function (err) {
                 console.log(err);
+                callback(false, []);
+            });
+        }
+        //"updateMyUserData" was called when user logined. args->(callback(bool, array))
+
+    }, {
+        key: "updateMyUserData",
+        value: function updateMyUserData(callback) {
+            this.axios.get("/user/get_user?session_id=" + this.sessionID).then(function (res) {
+                callback(true, res.data);
+                console.log(res);
+            }).catch(function (err) {
+                callback(false, {});
+                console.log("Errored!!");
             });
         }
     }]);
@@ -12797,17 +12825,17 @@ var _class = function () {
 exports.default = _class;
 
 },{"axios":1}],32:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-
-exports.default = function () {
-    /*var iso = new Isotope( '.grid', {
-        // options
-    });
-    */
+exports.default = {
+    hideLoginmodal: function hideLoginmodal() {
+        $('body').removeClass('modal-open'); // 1
+        $('.modal-backdrop').remove(); // 2
+        $('#loginModal').modal('hide'); // 3
+    }
 };
 
 },{}]},{},[30]);
