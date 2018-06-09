@@ -21,16 +21,27 @@ export default class {
             callback(false);
         })
     }
-    //"updateStatusData" call once at start. args->(callback(array))
+    //"updateStatusData" call once at start. args->(callback(bool, array))
     updateStatusData(callback){
         this.axios.get("/status/get_all_status")
         .then((res)=>{
             console.log(res.data);
             this.statusArray = res.data.data;
-            callback(res.data.data);
+            callback(true,res.data.data);
         })
         .catch((err) => {
             console.log(err);
+            callback(false,[])
+        })
+    }
+    //"updateMyUserData" was called when user logined. args->(callback(bool, array))
+    updateMyUserData(callback){
+        this.axios.get("/user/get_user?session_id=" + this.sessionID)
+        .then((res)=>{
+            callback(true, res.data);
+        })
+        .catch((err)=>{
+            callback(false, {})
         })
     }
 

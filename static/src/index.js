@@ -21,8 +21,8 @@ window.onload = ()=>{
             password:"",
         },
         created:function(){
-            api.updateStatusData((data)=>{
-                this.statusArray = data;
+            api.updateStatusData((isSuc, data)=>{
+                if(isSuc) this.statusArray = data;
             });
         },
         methods:{
