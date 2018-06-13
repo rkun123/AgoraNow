@@ -12701,6 +12701,7 @@ window.onload = function () {
             message: "Hello, World",
             statusArray: [],
             userData: {
+                user_id: "",
                 username: ""
             },
             createData: {
@@ -12733,7 +12734,10 @@ window.onload = function () {
                         _this2.UIflags.logined = true;
                         api.updateMyUserData(function (isSuc, data) {
                             console.log(data);
-                            if (isSuc) _this2.userData.username = data.username;
+                            if (isSuc) {
+                                _this2.userData.username = data.username;
+                                _this2.userData.user_id = data.user_id;
+                            }
                         });
                     } else {
                         _this2.username = _this2.password = "";
@@ -12751,8 +12755,25 @@ window.onload = function () {
                         if (data) {
                             _this3.statusArray.push(data);
                             _ui2.default.hideCreatemodal();
+                            _this3.UIflags.createError = false;
                         }
                     });
+                });
+                this.createData = {};
+
+                console.log(this.createData);
+            },
+            deleteStatus: function deleteStatus(e, status_id) {
+                var _this4 = this;
+
+                console.log("Delete: " + status_id);
+                api.deleteStatus(status_id, function (data) {
+                    if (data) {
+                        var i = _this4.statusArray.findIndex(function (elem) {
+                            return elem.status_id === status_id;
+                        });
+                        _this4.statusArray.splice(i, 1);
+                    }
                 });
             }
         }
@@ -12857,6 +12878,18 @@ var _class = function () {
             }).catch(function (err) {
                 console.log(err);
                 callback(null);
+            });
+        }
+        //"deleteStatus"
+
+    }, {
+        key: "deleteStatus",
+        value: function deleteStatus(status_id, callback) {
+            this.axios.post("status/delete_status?session_id=" + this.sessionID + "&status_id=" + status_id).then(function (res) {
+                if (res) callback(true);
+            }).catch(function (err) {
+                console.log(err);
+                callback(false);
             });
         }
     }]);

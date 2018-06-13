@@ -2,10 +2,10 @@
 from django.http import *
 from django.shortcuts import render
 from .models import Status
-#from user.models import User
 from user.models import User
 from datetime import datetime
 import json
+import uuid
 import sessionController
 import myUtils
 
@@ -19,7 +19,7 @@ def status_update(req):
     author = User.objects.filter(user_id=user_id)[0]
     print(author)
     if author:
-        status_record = Status(author=author, pos_X=req_data["pos_X"], pos_Y=req_data["pos_Y"],comment=req_data["comment"])
+        status_record = Status(status_id=uuid.uuid4(), author=author, pos_X=req_data["pos_X"], pos_Y=req_data["pos_Y"], comment=req_data["comment"])
         status_record.save()
         return JsonResponse({"status_id":status_record.status_id})
 
@@ -45,3 +45,18 @@ def getAllStatus(req):
     dataDict = {}
     dataDict["data"] = dataList
     return JsonResponse(dataDict)
+
+def status_delete(req):
+    status_id = req.GET.get("status_id")
+    session_id = req.GET.get("session_id")
+    print(status_id)
+    status_record = Status.objects.get(status_id=status_id)
+    user_id = sessionController.getSession(session_id)
+    author = User.objects.filter(user_id=user_id)[0]
+    print(status_record)
+    if status_record and status_record.author == author:
+        print("Deleting collum was detected!!")
+        status_record.delete()
+        return HttpResponse()
+    else:
+        return Http404()

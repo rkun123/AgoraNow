@@ -74,5 +74,16 @@ export default class {
             callback(null);
         })
     }
+    //"deleteStatus"
+    deleteStatus(status_id, callback){
+        this.axios.post("status/delete_status?session_id=" + this.sessionID + "&status_id=" + status_id)
+        .then((res)=>{
+            if(res) callback(true);
+        })
+        .catch((err)=>{
+            console.log(err);
+            callback(false);
+        })
+    }
 
 }

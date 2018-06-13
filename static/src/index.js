@@ -14,7 +14,8 @@ window.onload = ()=>{
             message: "Hello, World",
             statusArray:[],
             userData:{
-                username:"",
+                user_id: "",
+                username:""
             },
             createData:{
                 comment:"",
@@ -42,7 +43,10 @@ window.onload = ()=>{
                         this.UIflags.logined = true;
                         api.updateMyUserData((isSuc, data)=>{
                             console.log(data);
-                            if(isSuc) this.userData.username = data.username;
+                            if(isSuc){
+                                this.userData.username = data.username;
+                                this.userData.user_id = data.user_id;
+                            }
                         })
                     }else{
                         this.username = this.password = "";
@@ -58,9 +62,25 @@ window.onload = ()=>{
                         if(data){
                             this.statusArray.push(data);
                             ui.hideCreatemodal();
+                            this.UIflags.createError = false;
                         }
                     })
-                })
+                });
+                this.createData = {};
+
+                console.log(this.createData);
+            },
+            deleteStatus:function(e, status_id){
+                console.log("Delete: "+status_id);
+                api.deleteStatus(status_id, (data)=>{
+                    if(data){
+                        var i = this.statusArray.findIndex((elem)=>{
+                            return elem.status_id === status_id;
+                        });
+                        this.statusArray.splice(i, 1);
+                    }
+                });
+
             }
         }
     });

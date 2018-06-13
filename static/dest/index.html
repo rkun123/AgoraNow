@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <title>あごらなう</title>
-        <link rel="stylesheet" href="css/index.css">
+        <!--<link rel="stylesheet" href="css/index.css">-->
         <link rel="stylesheet" href="vendor/bootstrap.min.css">
     </head>
     <body>
@@ -29,11 +29,17 @@
                 </div>
             </nav>
             <div class="navSpacer"></div>
-            <div class="grid listWrapper">
-                <div class="grid-item card" style="width:12em;height:12em;" v-for="status in statusArray">
-                    <h5 class="card-title">{{ status.author.username }}</h5><br>
-                    <div class="card-text">{{ status.position.x }} x {{ status.position.y }}</div>
-                    <div class="cared-text">{{ status.comment }}</div>
+            <div class="listWrapper">
+                <div class="card" style="margin: 1rem;" v-for="status in statusArray">
+                    <h5 class="card-title" style="margin:1rem;">{{ status.author.username }}</h5><br>
+                    <div class="card-body">
+                        <div class="card-text">{{ status.position.x }} x {{ status.position.y }}</div>
+                        <div class="card-text">{{ status.comment }}</div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-danger" v-if="status.author.user_id === userData.user_id" v-on:click="deleteStatus($event,status.status_id)">Delete</button>
+                        <button class="btn btn-danger" v-else disabled>Delete</button>
+                    </div>
                 </div>
             </div>
 
