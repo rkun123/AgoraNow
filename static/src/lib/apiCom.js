@@ -11,12 +11,23 @@ export default class {
     //"login" args->(username, password, callback(bool))
     login(user, pass, callback){
         this.axios.post("/user/login",{"username": user, "password": pass})
-        .then((res)=>{
+        .then((res) => {
             this.sessionID = res.data.session_id;
             console.log("Success!!");
             callback(true);
         })
-        .catch((err)=>{
+        .catch((err) => {
+            console.log("Failed!!" + err);
+            callback(false);
+        })
+    }
+
+    createUser(user, pass, callback){
+        this.axios.post("/user/create_user",{"username": user, "password": pass})
+        .then((res) => {
+            callback(true);
+        })
+        .catch((err) => {
             console.log("Failed!!" + err);
             callback(false);
         })
@@ -24,7 +35,7 @@ export default class {
     //"updateStatusData" call once at start. args->(callback(bool, array))
     updateStatusData(callback){
         this.axios.get("/status/get_all_status")
-        .then((res)=>{
+        .then((res) => {
             console.log(res.data);
             //this.statusArray = res.data.data;
             callback(res.data.data);

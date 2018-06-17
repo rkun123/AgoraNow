@@ -13,6 +13,11 @@ window.onload = ()=>{
             header: "<h1>あごらなう</h1>",
             message: "Hello, World",
             statusArray:[],
+            createUserData:{
+                username: "",
+                password: "",
+                password_confirm: ""
+            },
             userData:{
                 user_id: "",
                 username:""
@@ -25,7 +30,9 @@ window.onload = ()=>{
             UIflags:{
                 loginError: false,
                 logined: false,
-                createError: false
+                createError: false,
+                createUserError: false,
+                createUserConfirmPasswordError: false
             },
             username:"",
             password:"",
@@ -53,6 +60,23 @@ window.onload = ()=>{
                         this.UIflags.loginError = true;
                     }
                 });
+            },
+            createUser:function(e){
+                console.log("!!");
+                if(this.createUserData.password == this.createUserData.password_confirm){
+                    api.createUser(this.createUserData.username, this.createUserData.password,(issuc)=>{
+                        if(issuc){
+                            console.log("Making user have successed");
+                            this.login(this.createUserData.username, this.createUserData.password);
+                            this.UIflags.createUserError = this.UIflags.createUserConfirmPasswordError = false;
+                        }else{
+                            console.log("Making user have insuccessed");
+                            this.UIflags.createUserError = true;
+                        }
+                    })
+                }else{
+                    this.UIflags.createUserConfirmPasswordError = true;
+                }
             },
             create:function(e){
                 api.createStatus(this.createData.pos_X, this.createData.pos_Y, this.createData.comment, (status_id)=>{

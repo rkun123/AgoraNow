@@ -12700,6 +12700,11 @@ window.onload = function () {
             header: "<h1>あごらなう</h1>",
             message: "Hello, World",
             statusArray: [],
+            createUserData: {
+                username: "",
+                password: "",
+                password_confirm: ""
+            },
             userData: {
                 user_id: "",
                 username: ""
@@ -12712,7 +12717,9 @@ window.onload = function () {
             UIflags: {
                 loginError: false,
                 logined: false,
-                createError: false
+                createError: false,
+                createUserError: false,
+                createUserConfirmPasswordError: false
             },
             username: "",
             password: ""
@@ -12745,17 +12752,36 @@ window.onload = function () {
                     }
                 });
             },
-            create: function create(e) {
+            createUser: function createUser(e) {
                 var _this3 = this;
+
+                console.log("!!");
+                if (this.createUserData.password == this.createUserData.password_confirm) {
+                    api.createUser(this.createUserData.username, this.createUserData.password, function (issuc) {
+                        if (issuc) {
+                            console.log("Making user have successed");
+                            _this3.login(_this3.createUserData.username, _this3.createUserData.password);
+                            _this3.UIflags.createUserError = _this3.UIflags.createUserConfirmPasswordError = false;
+                        } else {
+                            console.log("Making user have insuccessed");
+                            _this3.UIflags.createUserError = true;
+                        }
+                    });
+                } else {
+                    this.UIflags.createUserConfirmPasswordError = true;
+                }
+            },
+            create: function create(e) {
+                var _this4 = this;
 
                 api.createStatus(this.createData.pos_X, this.createData.pos_Y, this.createData.comment, function (status_id) {
                     console.log(status_id);
-                    if (!status_id) _this3.UIflags.createError = true;
+                    if (!status_id) _this4.UIflags.createError = true;
                     api.getStatusData(status_id, function (data) {
                         if (data) {
-                            _this3.statusArray.push(data);
+                            _this4.statusArray.push(data);
                             _ui2.default.hideCreatemodal();
-                            _this3.UIflags.createError = false;
+                            _this4.UIflags.createError = false;
                         }
                     });
                 });
@@ -12764,15 +12790,15 @@ window.onload = function () {
                 console.log(this.createData);
             },
             deleteStatus: function deleteStatus(e, status_id) {
-                var _this4 = this;
+                var _this5 = this;
 
                 console.log("Delete: " + status_id);
                 api.deleteStatus(status_id, function (data) {
                     if (data) {
-                        var i = _this4.statusArray.findIndex(function (elem) {
+                        var i = _this5.statusArray.findIndex(function (elem) {
                             return elem.status_id === status_id;
                         });
-                        _this4.statusArray.splice(i, 1);
+                        _this5.statusArray.splice(i, 1);
                     }
                 });
             }
@@ -12818,6 +12844,16 @@ var _class = function () {
             this.axios.post("/user/login", { "username": user, "password": pass }).then(function (res) {
                 _this.sessionID = res.data.session_id;
                 console.log("Success!!");
+                callback(true);
+            }).catch(function (err) {
+                console.log("Failed!!" + err);
+                callback(false);
+            });
+        }
+    }, {
+        key: "createUser",
+        value: function createUser(user, pass, callback) {
+            this.axios.post("/user/create_user", { "username": user, "password": pass }).then(function (res) {
                 callback(true);
             }).catch(function (err) {
                 console.log("Failed!!" + err);

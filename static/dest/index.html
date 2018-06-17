@@ -24,12 +24,16 @@
                 <div class="navbar-text">
                     {{ userData.username }}
                     <button class="btn btn-primary" data-toggle="modal" data-target="#createModal" v-if="UIflags.logined">Create</button>
-                    <button class="btn btn-primary" data-toggle="modal" data-target="#loginModal">Login</button>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#createUserModal" v-if="!UIflags.logined">CreateUser</button>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#loginModal" v-if="!UIflags.logined">Login</button>
 
                 </div>
             </nav>
             <div class="navSpacer"></div>
             <div class="listWrapper">
+                <div class="alert alert-primary m-3" role="alert">
+                    いまは誰も「あごらなう」してないよ！！
+                </div>
                 <div class="card" style="margin: 1rem;" v-for="status in statusArray">
                     <h5 class="card-title" style="margin:1rem;">{{ status.author.username }}</h5><br>
                     <div class="card-body">
@@ -43,7 +47,7 @@
                 </div>
             </div>
 
-            <!--login Popuo-->
+            <!--login Popup-->
             <div class="modal fade" id="loginModal">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -63,6 +67,35 @@
                         </div>
                         <div class="modal-footer">
                             <button class="btn btn-primary" v-on:click="login">Login</button>
+                            <button class="btn" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--createUserPopup-->
+            <div class="modal fade" id="createUserModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">CreateUser</h5>
+                        </div>
+                        <div class="modal-body">
+                            <div class="alert alert-primary" v-if="UIflags.loginError">Can't login to Server!!</div>
+                            <div class="form-group">
+                                <label>Username</label>
+                                <input class="form-control" v-model="createUserData.username" placeholder="Username?">
+                            </div>
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input type="password" class="form-control" v-model="createUserData.password" placeholder="Password?">
+                            </div>
+                            <div class="form-group">
+                                <label>Password(Confirm)</label>
+                                <input type="password" class="form-control" v-model="createUserData.password_confirm" placeholder="Password?">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" v-on:click="createUser">Create</button>
                             <button class="btn" data-dismiss="modal">Cancel</button>
                         </div>
                     </div>

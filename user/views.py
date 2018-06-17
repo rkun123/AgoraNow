@@ -18,7 +18,7 @@ def createUser(req):
         userRecord.username = reqData["username"]
         userRecord.password = reqData["password"]
         userRecord.save()
-        return HttpResponseGone()
+        return HttpResponse()
     except:
         return HttpResponseBadRequest()
 
