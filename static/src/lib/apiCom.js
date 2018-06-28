@@ -25,11 +25,11 @@ export default class {
     createUser(user, pass, callback){
         this.axios.post("/user/create_user",{"username": user, "password": pass})
         .then((res) => {
-            callback(true);
+            callback(res);
         })
         .catch((err) => {
             console.log("Failed!!" + err);
-            callback(false);
+            callback(err);
         })
     }
     //"updateStatusData" call once at start. args->(callback(bool, array))

@@ -1,7 +1,7 @@
 import redis
 import uuid
 
-r = redis.StrictRedis(host="localhost", port=6370, db=0)
+r = redis.StrictRedis(host="localhost", port=6379, db=0)
 
 
 def setSession(user_id):

@@ -12691,6 +12691,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var app = void 0;
 window.onload = function () {
+
     var api = new _apiCom2.default();
 
     //main app
@@ -12755,15 +12756,18 @@ window.onload = function () {
             createUser: function createUser(e) {
                 var _this3 = this;
 
-                console.log("!!");
                 if (this.createUserData.password == this.createUserData.password_confirm) {
                     api.createUser(this.createUserData.username, this.createUserData.password, function (issuc) {
+                        console.log(issuc);
                         if (issuc) {
                             console.log("Making user have successed");
-                            _this3.login(_this3.createUserData.username, _this3.createUserData.password);
+                            _this3.username = _this3.createUserData.username;
+                            _this3.password = _this3.createUserData.password;
+                            _this3.login();
                             _this3.UIflags.createUserError = _this3.UIflags.createUserConfirmPasswordError = false;
                         } else {
                             console.log("Making user have insuccessed");
+                            console.log(issuc);
                             _this3.UIflags.createUserError = true;
                         }
                     });
@@ -12854,10 +12858,10 @@ var _class = function () {
         key: "createUser",
         value: function createUser(user, pass, callback) {
             this.axios.post("/user/create_user", { "username": user, "password": pass }).then(function (res) {
-                callback(true);
+                callback(res);
             }).catch(function (err) {
                 console.log("Failed!!" + err);
-                callback(false);
+                callback(err);
             });
         }
         //"updateStatusData" call once at start. args->(callback(bool, array))
@@ -12951,6 +12955,13 @@ exports.default = {
         $('body').removeClass('modal-open');
         $('.modal-backdrop').remove();
         $('#createModal').modal('hide');
+    },
+    clickPositioningInit: function clickPositioningInit() {
+        console.log("clickPositioningInit was called");
+        var imgDOM = $("#clickPositioningImg")[0];
+        imgDOM.click(function (e) {
+            console.log(e.pageX + " : " + e.pageY);
+        });
     }
 };
 

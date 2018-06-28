@@ -11,16 +11,13 @@ import myUtils
 def createUser(req):
     #Create Account (POST)
     userRecord = User()
-    try:
-        reqData = myUtils.parseReq(req)
-        if len(User.objects.filter(username=reqData["username"])):
-            return HttpResponseBadRequest("Received username has already exists.")
-        userRecord.username = reqData["username"]
-        userRecord.password = reqData["password"]
-        userRecord.save()
-        return HttpResponse()
-    except:
-        return HttpResponseBadRequest()
+    reqData = myUtils.parseReq(req)
+    if len(User.objects.filter(username=reqData["username"])):
+        return JsonResponse({"message":"Received username has already exists."}, status=404)
+    userRecord.username = reqData["username"]
+    userRecord.password = reqData["password"]
+    userRecord.save()
+    return HttpResponse()
 
 #        return HttpResponse(HttpResponseBadRequest())
 
@@ -65,8 +62,11 @@ def login(req):
     if(data):
         #find users
         record = User.objects.filter(username=data["username"], password=data["password"])[0]
-        resultData["session_id"] = setSession(record.user_id)
-        print(resultData)
-        return JsonResponse(resultData)
+        if(record):
+            resultData["session_id"] = setSession(record.user_id)
+            print(resultData)
+            return JsonResponse(resultData)
+        else:
+            return 404
     else:
         return HttpResponseBadRequest()

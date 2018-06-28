@@ -4,6 +4,7 @@ import ui from "./lib/ui"
 
 let app;
 window.onload = ()=>{
+
     let api = new Api();
 
     //main app
@@ -62,15 +63,18 @@ window.onload = ()=>{
                 });
             },
             createUser:function(e){
-                console.log("!!");
                 if(this.createUserData.password == this.createUserData.password_confirm){
                     api.createUser(this.createUserData.username, this.createUserData.password,(issuc)=>{
+                        console.log(issuc);
                         if(issuc){
                             console.log("Making user have successed");
-                            this.login(this.createUserData.username, this.createUserData.password);
+                            this.username = this.createUserData.username;
+                            this.password = this.createUserData.password;
+                            this.login();
                             this.UIflags.createUserError = this.UIflags.createUserConfirmPasswordError = false;
                         }else{
                             console.log("Making user have insuccessed");
+                            console.log(issuc);
                             this.UIflags.createUserError = true;
                         }
                     })
@@ -95,7 +99,7 @@ window.onload = ()=>{
                 console.log(this.createData);
             },
             deleteStatus:function(e, status_id){
-                console.log("Delete: "+status_id);
+                console.log("Delete: " + status_id);
                 api.deleteStatus(status_id, (data)=>{
                     if(data){
                         var i = this.statusArray.findIndex((elem)=>{
@@ -104,11 +108,7 @@ window.onload = ()=>{
                         this.statusArray.splice(i, 1);
                     }
                 });
-
             }
         }
     });
-
-
-
 }
