@@ -12805,6 +12805,16 @@ window.onload = function () {
                         _this5.statusArray.splice(i, 1);
                     }
                 });
+            },
+            initPosView: function initPosView(e) {
+                var _this6 = this;
+
+                console.log("Initialize canvas");
+                _ui2.default.positioningCanvasInit(function (x, y) {
+                    _this6.createData.pos_X = x;
+                    _this6.createData.pos_Y = y;
+                    console.log(_this6.createData.x + " x " + _this6.createData.y);
+                });
             }
         }
     });
@@ -12956,12 +12966,37 @@ exports.default = {
         $('.modal-backdrop').remove();
         $('#createModal').modal('hide');
     },
-    clickPositioningInit: function clickPositioningInit() {
-        console.log("clickPositioningInit was called");
-        var imgDOM = $("#clickPositioningImg")[0];
-        imgDOM.click(function (e) {
-            console.log(e.pageX + " : " + e.pageY);
+    positioningCanvasInit: function positioningCanvasInit(clickCallback) {
+        console.log("Wow!!");
+        var canvasWrapper = $(".canvasWrapper");
+        var canvas = $("#positioningCanvas");
+        //set canvas space as parent.
+        console.log(canvasWrapper.width() + " : " + canvasWrapper.height());
+        //canvas.attr("width", canvasWrapper.width());
+        //canvas.attr("height", canvasWrapper.height());
+        canvas.attr("width", 466);
+        canvas.attr("height", 230);
+        var ctx = canvas[0].getContext("2d");
+        var mapImg = new Image();
+        mapImg.src = "imgs/map.png";
+        mapImg.onload = function () {
+            ctx.drawImage(mapImg, 0, 0, 466, 230);
+        };
+        //click event
+        $("#positioningCanvas").click(function (event) {
+            var x = void 0,
+                y = void 0;
+            var rect = $(event.target).offset();
+            x = event.pageX - rect.left;
+            y = event.pageY - rect.top;
+            var markerImg = new Image();
+            markerImg.src = "imgs/marker2.png";
+            markerImg.onload = function () {
+                ctx.drawImage(markerImg, x - 50, y - 50, 100, 100);
+            };
+            clickCallback(x, y);
         });
+        //
     }
 };
 

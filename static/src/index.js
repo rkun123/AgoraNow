@@ -108,7 +108,15 @@ window.onload = ()=>{
                         this.statusArray.splice(i, 1);
                     }
                 });
-            }
+            },
+			initPosView: function(e){
+                console.log("Initialize canvas");
+                ui.positioningCanvasInit((x, y)=>{
+					this.createData.pos_X = x;
+					this.createData.pos_Y = y;
+					console.log(this.createData.x + " x " + this.createData.y);
+				});
+			}
         }
     });
 }
