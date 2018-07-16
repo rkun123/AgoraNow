@@ -12810,10 +12810,9 @@ window.onload = function () {
                 var _this6 = this;
 
                 console.log("Initialize canvas");
-                _ui2.default.positioningCanvasInit(function (x, y) {
+                _ui2.default.positioningInit(function (x, y) {
                     _this6.createData.pos_X = x;
                     _this6.createData.pos_Y = y;
-                    console.log(_this6.createData.x + " x " + _this6.createData.y);
                 });
             }
         }
@@ -12953,51 +12952,37 @@ exports.default = _class;
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+				value: true
 });
 exports.default = {
-    hideLoginmodal: function hideLoginmodal() {
-        $('body').removeClass('modal-open');
-        $('.modal-backdrop').remove();
-        $('#loginModal').modal('hide');
-    },
-    hideCreatemodal: function hideCreatemodal() {
-        $('body').removeClass('modal-open');
-        $('.modal-backdrop').remove();
-        $('#createModal').modal('hide');
-    },
-    positioningCanvasInit: function positioningCanvasInit(clickCallback) {
-        console.log("Wow!!");
-        var canvasWrapper = $(".canvasWrapper");
-        var canvas = $("#positioningCanvas");
-        //set canvas space as parent.
-        console.log(canvasWrapper.width() + " : " + canvasWrapper.height());
-        //canvas.attr("width", canvasWrapper.width());
-        //canvas.attr("height", canvasWrapper.height());
-        canvas.attr("width", 466);
-        canvas.attr("height", 230);
-        var ctx = canvas[0].getContext("2d");
-        var mapImg = new Image();
-        mapImg.src = "imgs/map.png";
-        mapImg.onload = function () {
-            ctx.drawImage(mapImg, 0, 0, 466, 230);
-        };
-        //click event
-        $("#positioningCanvas").click(function (event) {
-            var x = void 0,
-                y = void 0;
-            var rect = $(event.target).offset();
-            x = event.pageX - rect.left;
-            y = event.pageY - rect.top;
-            var markerImg = new Image();
-            markerImg.src = "imgs/marker2.png";
-            markerImg.onload = function () {
-                ctx.drawImage(markerImg, x - 50, y - 50, 100, 100);
-            };
-            clickCallback(x, y);
-        });
-        //
-    }
+				hideLoginmodal: function hideLoginmodal() {
+								$('body').removeClass('modal-open');
+								$('.modal-backdrop').remove();
+								$('#loginModal').modal('hide');
+				},
+				hideCreatemodal: function hideCreatemodal() {
+								$('body').removeClass('modal-open');
+								$('.modal-backdrop').remove();
+								$('#createModal').modal('hide');
+				},
+				positioningInit: function positioningInit(clickCallback) {
+								//click event
+								$("#createMap").click(function (event) {
+												var wrapperOffset = $("#createMap").offset();
+												//let x = (event.clientX - event.delegateTarget.x) / $("#createMap").width();
+												//let y = (event.clientY - event.delegateTarget.y) / $("#createMap").height();
+												var x = (event.clientX - wrapperOffset.left) / $("#createMap").width();
+												var y = (event.clientY - wrapperOffset.top) / $("#createMap").height();
+												$("#createMarker").css("top", y * 100 + "%");
+												$("#createMarker").css("left", x * 100 + "%");
+												console.log(event);
+												console.log(wrapperOffset);
+												console.log("clientX:" + event.clientX + ", delegateTarget.x:" + event.delegateTarget.x);
+												console.log(x + " x " + y);
+												clickCallback(x * 100, y * 100);
+								});
+								//
+				}
 };
 
 },{}]},{},[30]);
