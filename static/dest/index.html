@@ -31,7 +31,7 @@
             </nav>
             <div class="navSpacer"></div>
             <div class="listWrapper">
-                <div class="alert alert-primary m-3" role="alert" v-if="!createData">
+                <div class="alert alert-primary m-3" role="alert" v-if="!statusArray.length">
                     いまは誰も「あごらなう」してないよ！！
                 </div>
                 <div class="card" style="margin: 1rem;" v-for="status in statusArray">
