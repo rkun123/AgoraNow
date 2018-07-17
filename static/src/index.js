@@ -94,8 +94,11 @@ window.onload = ()=>{
                         }
                     })
                 });
-                this.createData = {};
-
+                this.createData = {
+                	comment:"",
+                	pos_X:"",
+                	pos_Y:""
+				};
                 console.log(this.createData);
             },
             deleteStatus:function(e, status_id){
