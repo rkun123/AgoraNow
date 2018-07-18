@@ -1,5 +1,6 @@
 var fs = require("fs");
 var browserify = require("browserify");
+
 browserify("./src/index.js")
   .transform("babelify", {presets: ["env"]})
   .bundle()

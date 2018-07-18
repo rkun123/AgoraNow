@@ -12789,8 +12789,11 @@ window.onload = function () {
                         }
                     });
                 });
-                this.createData = {};
-
+                this.createData = {
+                    comment: "",
+                    pos_X: "",
+                    pos_Y: ""
+                };
                 console.log(this.createData);
             },
             deleteStatus: function deleteStatus(e, status_id) {
@@ -12966,13 +12969,13 @@ exports.default = {
 								$('#createModal').modal('hide');
 				},
 				positioningInit: function positioningInit(clickCallback) {
+								//$("#createMarker").css("visibility", "hidden");
 								//click event
 								$("#createMap").click(function (event) {
 												var wrapperOffset = $("#createMap").offset();
-												//let x = (event.clientX - event.delegateTarget.x) / $("#createMap").width();
-												//let y = (event.clientY - event.delegateTarget.y) / $("#createMap").height();
 												var x = (event.clientX - wrapperOffset.left) / $("#createMap").width();
 												var y = (event.clientY - wrapperOffset.top) / $("#createMap").height();
+												$("#createMarker").css("visibility", "visible");
 												$("#createMarker").css("top", y * 100 + "%");
 												$("#createMarker").css("left", x * 100 + "%");
 												console.log(event);
